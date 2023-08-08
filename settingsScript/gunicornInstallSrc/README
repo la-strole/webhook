@@ -1,0 +1,5 @@
+1. Look at unicorn.service confihuration. 
+In fact Here unicorn uses to handle webhook to manipulate docker, 
+so I create user docker and group docker. 
+Maybe later I want to change it, but I if I change user-group here 
+then I have to cange users permission to manipulate docker.
