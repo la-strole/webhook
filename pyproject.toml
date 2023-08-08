@@ -6,13 +6,16 @@ authors = ["la-strole"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 Flask = "^2.3.2"
 gunicorn = "^21.2.0"
 requests = "^2.31.0"
 pytz = "^2023.3"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
