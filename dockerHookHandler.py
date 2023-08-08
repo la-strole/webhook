@@ -1,14 +1,7 @@
 import subprocess
 import time
 
-from logging_config import configure_logging
-
-# Call the logging configuration function
-configure_logging()
-
-# Create a logger instance for the current module
-import logging
-logger = logging.getLogger(__name__)
+from logging_config import logger_module2 as logger
 
 
 def image_manipulation(imagename, options, commands):

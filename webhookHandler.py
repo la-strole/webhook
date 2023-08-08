@@ -3,13 +3,7 @@ import requests
 from dockerHookHandler import image_manipulation 
 import datetime
 import pytz
-import logging
-from logging_config import configure_logging
-
-
-# Call the logging configuration function
-configure_logging()
-logger = logging.getLogger(__name__)
+from logging_config import logger_module1 as logger
 
 
 # Part of url to check if token came from dockerhub webhook
