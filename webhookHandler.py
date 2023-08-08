@@ -50,7 +50,7 @@ def webhook_handler():
             }
         requests.post(callback_url, json=body, headers=response_headers)
         logger.debug("Sent successful webhook POST request to dockerhub")
-        return None
+        return ('<p> accepted </p>')
     else:
         # response body https://docs.docker.com/docker-hub/webhooks/
         body = {
@@ -63,7 +63,7 @@ def webhook_handler():
             }
         requests.post(callback_url, json=body, headers=response_headers)
         logger.debug("Sent failure webhook POST request to dockerhub")
-        return None
+        return ('<p>accepted</p>')
 
 
 @app.route(f"/{uuid_dokcerhub}", methods=["GET"])
