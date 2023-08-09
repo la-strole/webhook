@@ -1,6 +1,6 @@
 #!/bin/bash
 touch /home/zhenya/webhook/webhook.log
-# MAKE SHURE TO DO IT. 
-# Because Flask app run by gunicorn.service from webhook user, 
-#it can not write in your direcory. And It raises Error.
+# PLEASE ENSURE TO COMPLETE THIS STEP.
+# This is crucial because the Flask app is executed by the gunicorn.service under the webhook user.
+# It doesn't have permissions to write in your directory, which can lead to errors.
 chmod a=rw /home/zhenya/webhook/webhook.log

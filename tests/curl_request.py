@@ -1,7 +1,7 @@
 import subprocess
 import json
 
-# Create fake POST request from dockerhub
+# Generate a simulated POST request from DockerHub.
 body = {"callback_url": "https://registry.hub.docker.com/u/svendowideit/testhook/hook/2141b5bi5i5b02bec211i4eeih0242eg11000a/",
         "push_data": {
             "pushed_at": 1417566161,

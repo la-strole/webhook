@@ -10,13 +10,13 @@ log() {
     echo "$timestamp - $module_name - $level - $message" >> "$log_file"
 }
 
-log "INFO" "Start $module_name script"
+log "INFO" "Initiating the $module_name script"
 
-# Stop running docker container
-command_output=$(echo "test successfull" 2>&1)
-# Check if the command was successful or resulted in an error
+# Cease the operation of the active Docker container
+command_output=$(echo "Test successful" 2>&1)
+# Determine if the command executed successfully or resulted in an error
 if [ $? -eq 0 ]; then
-    log "INFO" "test script run: $command_output"
+    log "INFO" "Test script executed: $command_output"
 else
-    log "ERROR" "test script faild: $command_output"
+    log "ERROR" "Test script failed: $command_output"
 fi

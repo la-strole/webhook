@@ -10,44 +10,44 @@ log() {
     echo "$timestamp - $module_name - $level - $message" >> "$log_file"
 }
 
-log "DEBUG" "Start $module_name script"
+log "DEBUG" "Starting the $module_name script"
 
-# Stop running docker container
+# Stop the running docker container
 command_output=$(sudo docker stop pomodoro 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Stop container successfully: $command_output"
+    log "DEBUG" "Container stopped successfully: $command_output"
 else
-    log "ERROR" "Stop container faild: $command_output"
+    log "ERROR" "Failed to stop container: $command_output"
 fi
 
-# Remove old docker image
-# Sleep for 7 seconds
+# Remove the old docker image
+# Wait for 7 seconds
 sleep 7
 command_output=$(sudo docker image rm eugeneparkhom/pomodoro 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Old Image removed successfully: $command_output"
+    log "DEBUG" "Old image removed successfully: $command_output"
 else
-    log "ERROR" "Old Image removing faild: $command_output"
+    log "ERROR" "Failed to remove old image: $command_output"
 fi
 
-# Pull new image from docker
+# Pull the new image from docker
 sleep 5
 command_output=$(sudo docker pull eugeneparkhom/pomodoro 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Docker pull Image successfully: $command_output"
+    log "DEBUG" "Image pulled from Docker successfully: $command_output"
 else
-    log "ERROR" "Docker pull Image faild: $command_output"
+    log "ERROR" "Failed to pull image from Docker: $command_output"
 fi
 
-# Run new image
+# Run the new image
 sleep 5
 command_output=$(sudo docker run -p 8123:80 -d --rm --name pomodoro eugeneparkhom/pomodoro 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Docker run Image successfully: $command_output"
+    log "DEBUG" "Image run in Docker successfully: $command_output"
 else
-    log "ERROR" "Docker run Image faild: $command_output"
+    log "ERROR" "Failed to run image in Docker: $command_output"
 fi

@@ -1,4 +1,3 @@
 #!/bin/bash
-# Do it after changing in *py files
+# Perform this step after making changes in the *py files
 sudo systemctl restart gunicorn.service
-

@@ -1,12 +1,12 @@
 #!/bin/bash
-#Create new user 
+# Create a new user
 sudo useradd -M -s /usr/sbin/nologin webhook
-# Add user to group Docker
+# Add the user to the Docker group
 sudo usermod -aG docker webhook
-# Add permissions to run docker as root to user docker 
+# Grant permission to allow the user 'webhook' to execute Docker as root
 sudo visudo -f /etc/sudoers.d/dockerCommand
-#4. there add: 
+# In this file, add the following line:
 # webhook ALL=(ALL:ALL) NOPASSWD: /usr/bin/docker
 
-# check configuration
+# Verify the configuration
 sudo -u webhook docker ps
