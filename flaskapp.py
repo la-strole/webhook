@@ -32,7 +32,7 @@ def webhook_handler():
         return jsonify({'error': 'Invalid JSON data'}), 400
 
     # https://docs.docker.com/docker-hub/webhooks/
-    logger.debug(f"repo_name:{repo_name}")
+    logger.debug(f"repo_name: {repo_name}")
 
     # Open scripts binder
     with open('scripts_binder.json') as file:
@@ -43,7 +43,7 @@ def webhook_handler():
         if scripts_list:
             for script in data_dict.get(repo_name):
                 logger.info(f'Run script {script}')
-                path = f'/scripts/{script}'
+                path = f'scripts/{script}'
                 result = subprocess.run(['/bin/bash', path], check=False)
                 logger.debug(f'Script {script} finished '
                              f'with code {result.returncode}'
