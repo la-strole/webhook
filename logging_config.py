@@ -1,7 +1,9 @@
 import logging
 
 # Create a custom formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
 
 # Create a handler for console output
 console_handler = logging.StreamHandler()
@@ -18,8 +20,3 @@ logger_module1 = logging.getLogger('webhookHandler')
 logger_module1.setLevel(logging.DEBUG)
 logger_module1.addHandler(console_handler)  # Send logs to console
 logger_module1.addHandler(file_handler)     # Send logs to file
-
-logger_module2 = logging.getLogger('dockerHookHandler')
-logger_module2.setLevel(logging.DEBUG)
-logger_module2.addHandler(console_handler)  # Send logs to console
-logger_module2.addHandler(file_handler)     # Send logs to file
