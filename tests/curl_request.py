@@ -28,6 +28,12 @@ body = {"callback_url": "https://registry.hub.docker.com/u/svendowideit/testhook
         }
 
 body_json_string = json.dumps(body)
-url = "http://127.0.0.1:5000/0f3078d2-ac61-47ec-8186-f422e19f4fb5"
+
+# get url_token
+with open('../application_conf.json', 'r') as file:
+    configuration = json.load(file)
+    token = configuration.get('url_token')
+
+url = f"http://127.0.0.1:5000/{token}"
 command = ['curl', '-X', 'POST', '-H', 'Content-Type: application/json', '-d', body_json_string, url]
 subprocess.run(command)

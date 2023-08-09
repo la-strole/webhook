@@ -10,14 +10,16 @@ try:
         dockerhub_token = configuration.get('url_token')
 except Exception as e:
     logging_config.logger_module1.error(f"Unable to load configuration from "
-                                       f"./appplication_conf.json: {e}")
+                                        f"./appplication_conf.json: {e}")
 
 app = Flask(__name__)
+
 
 @app.route(f"/{dockerhub_token}", methods=["POST"])
 def webhook_handler():
 
-    logging_config.logger_module1.info('Received a webhook request from Docker')
+    logging_config.logger_module1.info(
+        'Received a webhook request from Docker')
 
     # Extract JSON payload from the request
     json_data = request.json
@@ -26,7 +28,8 @@ def webhook_handler():
         # Access specific values from the JSON data
         repo_name = json_data.get('repository').get('repo_name')
     except Exception as e:
-        logging_config.logger_module1.error(f'Invalid JSON data in DockerHub POST payload: {e}')
+        logging_config.logger_module1.error(f'Invalid JSON data '
+                                            f'in DockerHub POST payload: {e}')
         return jsonify({'error': 'Invalid JSON data'}), 400
 
     # Refer to: https://docs.docker.com/docker-hub/webhooks/
@@ -40,12 +43,18 @@ def webhook_handler():
         scripts_list = data_dict.get(repo_name)
         if scripts_list:
             for script in scripts_list:
-                logging_config.logger_module1.info(f'Executing script: {script}')
+                logging_config.logger_module1.info(
+                    f'Executing script: {script}'
+                    )
                 path = f'scripts/{script}'
                 result = subprocess.run(['/bin/bash', path], check=False)
-                logging_config.logger_module1.debug(f'Script {script} completed with exit code {result.returncode}')
+                logging_config.logger_module1.debug(
+                    f'Script {script} completed '
+                    f'with exit code {result.returncode}')
         else:
-            logging_config.logger_module1.error(f'No configured scripts found in /scripts for repository: {repo_name}')
+            logging_config.logger_module1.error(
+                f'No configured scripts found '
+                f'in /scripts for repository: {repo_name}')
 
     response = make_response('', 204)
     return response
