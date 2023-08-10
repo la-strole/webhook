@@ -27,6 +27,8 @@ def webhook_handler():
     try:
         # Access specific values from the JSON data
         repo_name = json_data.get('repository').get('repo_name')
+        container_name = repo_name.split('/')[1]
+        tag_name = json_data.get('push_data').get('tag')
     except Exception as e:
         logging_config.logger_module1.error(f'Invalid JSON data '
                                             f'in DockerHub POST payload: {e}')
@@ -47,7 +49,11 @@ def webhook_handler():
                     f'Executing script: {script}'
                     )
                 path = f'scripts/{script}'
-                result = subprocess.run(['/bin/bash', path], check=False)
+                result = subprocess.run(['/bin/bash', path,
+                                         repo_name,
+                                         tag_name,
+                                         container_name
+                                         ], check=False)
                 logging_config.logger_module1.debug(
                     f'Script {script} completed '
                     f'with exit code {result.returncode}')
