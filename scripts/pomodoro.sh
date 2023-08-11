@@ -1,7 +1,8 @@
 #!/bin/bash
+
 log_file="webhook.log"
 
-module_name="pomodoro.sh"
+module_name="pomodoroWorkflow.sh"
 
 log() {
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S,%3N")
@@ -14,14 +15,14 @@ repoName="$1"
 tagName="$2"
 containerName="$3"
 
-log "DEBUG" "Starting the $module_name script"
+# Stop existed pomodoro container
+./stopDockerContainer.sh $repoName $tagName $containerName 
 
-# Run the new image
-sleep 5
-command_output=$(sudo docker run -p 8123:80 -d --rm --name $containerName $repoName:$tagName 2>&1)
-# Check if the command was successful or resulted in an error
-if [ $? -eq 0 ]; then
-    log "DEBUG" "Image run in Docker successfully: $command_output"
-else
-    log "ERROR" "Failed to run image in Docker: $command_output"
-fi
+# Remove old Docker image
+./removeOldDockerImage.sh $repoName $tagName $containerName
+
+# Pull new Docker image
+./pullNewImageFromDocker.sh $repoName $tagName $containerName
+
+# Run Image as container
+./runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' ''

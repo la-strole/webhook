@@ -1,5 +1,5 @@
 {
-  "eugeneparkhom/pomodoro": ["downloadImage.sh", "pomodoro.sh"],
-  "eugeneparkhomweatherbot": ["downloadImage.sh", "weatherbot.sh"],
+  "eugeneparkhom/pomodoro": ["pomodoro.sh"],
+  "eugeneparkhomweatherbot": ["weatherbot.sh"],
   "johndou/testRepo": ["testScript.sh"]
 }
