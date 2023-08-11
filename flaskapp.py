@@ -9,7 +9,7 @@ try:
         configuration = json.load(file)
         dockerhub_token = configuration.get('url_token')
 except Exception as e:
-    logging_config.logger_module1.error(f"Unable to load configuration from "
+    logging_config.logger_flask_app.error(f"Unable to load configuration from "
                                         f"./appplication_conf.json: {e}")
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ app = Flask(__name__)
 @app.route(f"/{dockerhub_token}", methods=["POST"])
 def webhook_handler():
 
-    logging_config.logger_module1.info(
+    logging_config.logger_flask_app.info(
         'Received a webhook request from Docker')
 
     # Extract JSON payload from the request
@@ -30,12 +30,12 @@ def webhook_handler():
         container_name = repo_name.split('/')[1]
         tag_name = json_data.get('push_data').get('tag')
     except Exception as e:
-        logging_config.logger_module1.error(f'Invalid JSON data '
+        logging_config.logger_flask_app.error(f'Invalid JSON data '
                                             f'in DockerHub POST payload: {e}')
         return jsonify({'error': 'Invalid JSON data'}), 400
 
     # Refer to: https://docs.docker.com/docker-hub/webhooks/
-    logging_config.logger_module1.debug(f"Repository name: {repo_name}")
+    logging_config.logger_flask_app.debug(f"Repository name: {repo_name}")
 
     # Open the scripts binder
     with open('scripts_binder.json') as file:
@@ -45,7 +45,7 @@ def webhook_handler():
         scripts_list = data_dict.get(repo_name)
         if scripts_list:
             for script in scripts_list:
-                logging_config.logger_module1.info(
+                logging_config.logger_flask_app.info(
                     f'Executing script: {script}'
                     )
                 path = f'scripts/{script}'
@@ -54,11 +54,11 @@ def webhook_handler():
                                          tag_name,
                                          container_name
                                          ], check=False)
-                logging_config.logger_module1.debug(
+                logging_config.logger_flask_app.debug(
                     f'Script {script} completed '
                     f'with exit code {result.returncode}')
         else:
-            logging_config.logger_module1.error(
+            logging_config.logger_flask_app.error(
                 f'No configured scripts found '
                 f'in /scripts for repository: {repo_name}')
 

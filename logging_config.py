@@ -16,7 +16,7 @@ file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 
 # Create loggers for your modules
-logger_module1 = logging.getLogger('webhookHandler')
-logger_module1.setLevel(logging.DEBUG)
-logger_module1.addHandler(console_handler)  # Send logs to console
-logger_module1.addHandler(file_handler)     # Send logs to file
+logger_flask_app = logging.getLogger('webhookHandler')
+logger_flask_app.setLevel(logging.DEBUG)
+logger_flask_app.addHandler(console_handler)  # Send logs to console
+logger_flask_app.addHandler(file_handler)     # Send logs to file

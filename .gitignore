@@ -1,7 +1,7 @@
 .venv/
 *.log
 __pycache__/
-webhook.log
 *.lock
 *.json
-*.vscode
+*.vscode/
+.pytest_cache/
