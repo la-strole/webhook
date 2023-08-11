@@ -4,3 +4,4 @@ __pycache__/
 webhook.log
 *.lock
 *.json
+*.vscode
