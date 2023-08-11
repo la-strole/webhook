@@ -1,0 +1,5 @@
+{
+  "eugeneparkhom/pomodoro": ["downloadImage.sh", "pomodoro.sh"],
+  "eugeneparkhomweatherbot": ["downloadImage.sh", "weatherbot.sh"],
+  "johndou/testRepo": ["testScript.sh"]
+}

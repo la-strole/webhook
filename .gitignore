@@ -2,6 +2,5 @@
 *.log
 __pycache__/
 *.lock
-*.json
 *.vscode/
 .pytest_cache/
