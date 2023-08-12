@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, make_response
 import logging_config
 import json
 import subprocess
+import threading  # or `import multiprocessing` for processes
 
 # Segment of the URL used to validate the token from DockerHub webhook
 try:
@@ -10,32 +11,12 @@ try:
         dockerhub_token = configuration.get('url_token')
 except Exception as e:
     logging_config.logger_flask_app.error(f"Unable to load configuration from "
-                                        f"./appplication_conf.json: {e}")
+                                          f"./appplication_conf.json: {e}")
 
 app = Flask(__name__)
 
 
-@app.route(f"/{dockerhub_token}", methods=["POST"])
-def webhook_handler():
-
-    logging_config.logger_flask_app.info(
-        'Received a webhook request from Docker')
-
-    # Extract JSON payload from the request
-    json_data = request.json
-
-    try:
-        # Access specific values from the JSON data
-        repo_name = json_data.get('repository').get('repo_name')
-        container_name = repo_name.split('/')[1]
-        tag_name = json_data.get('push_data').get('tag')
-    except Exception as e:
-        logging_config.logger_flask_app.error(f'Invalid JSON data '
-                                            f'in DockerHub POST payload: {e}')
-        return jsonify({'error': 'Invalid JSON data'}), 400
-
-    # Refer to: https://docs.docker.com/docker-hub/webhooks/
-    logging_config.logger_flask_app.debug(f"Repository name: {repo_name}")
+def background_scripts_execution(repo_name, tag_name, container_name):
 
     # Open the scripts binder
     with open('scripts_binder.json') as file:
@@ -61,6 +42,36 @@ def webhook_handler():
             logging_config.logger_flask_app.error(
                 f'No configured scripts found '
                 f'in /scripts for repository: {repo_name}')
+
+
+@app.route(f"/{dockerhub_token}", methods=["POST"])
+def webhook_handler():
+
+    logging_config.logger_flask_app.info(
+        'Received a webhook request from Docker')
+
+    # Extract JSON payload from the request
+    json_data = request.json
+
+    try:
+        # Access specific values from the JSON data
+        repo_name = json_data.get('repository').get('repo_name')
+        container_name = repo_name.split('/')[1]
+        tag_name = json_data.get('push_data').get('tag')
+    except Exception as e:
+        logging_config.logger_flask_app.error(f'Invalid JSON data '
+                                            f'in DockerHub POST payload: {e}')
+        return jsonify({'error': 'Invalid JSON data'}), 400
+
+    # Refer to: https://docs.docker.com/docker-hub/webhooks/
+    logging_config.logger_flask_app.debug(f"Repository name: {repo_name}")
+
+    # Start a new thread or process for the background task
+    task_thread = threading.Thread(
+        target=background_scripts_execution, 
+        args=(repo_name, tag_name, container_name)
+        )
+    task_thread.start()
 
     response = make_response('', 204)
     return response
