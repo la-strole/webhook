@@ -16,7 +16,7 @@ except Exception as e:
 app = Flask(__name__)
 
 
-def background_scripts_execution(repo_name, tag_name, container_name):
+def background_scripts_execution(pwd, repo_name, tag_name, container_name):
 
     # Open the scripts binder
     with open('scripts_binder.json') as file:
@@ -29,7 +29,7 @@ def background_scripts_execution(repo_name, tag_name, container_name):
                 logging_config.logger_flask_app.info(
                     f'Executing script: {script}'
                     )
-                path = f'scripts/{script}'
+                path = f'{pwd}/scripts/{script}'
                 result = subprocess.run(['/bin/bash', path,
                                          repo_name,
                                          tag_name,
@@ -66,10 +66,19 @@ def webhook_handler():
     # Refer to: https://docs.docker.com/docker-hub/webhooks/
     logging_config.logger_flask_app.debug(f"Repository name: {repo_name}")
 
+    # Run the 'pwd' command to get the current working directory
+    process = subprocess.Popen(['pwd'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+
+    # Decode the bytes output to a string
+    current_directory = stdout.decode('utf-8').strip()
+
+    logging_config.logger_flask_app.debug(f"Current Directory: {current_directory}")
+
     # Start a new thread or process for the background task
     task_thread = threading.Thread(
         target=background_scripts_execution, 
-        args=(repo_name, tag_name, container_name)
+        args=(current_directory, repo_name, tag_name, container_name)
         )
     task_thread.start()
 
