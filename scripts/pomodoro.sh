@@ -15,14 +15,61 @@ repoName="$1"
 tagName="$2"
 containerName="$3"
 
-# Stop existed pomodoro container
-./stopDockerContainer.sh $repoName $tagName $containerName 
-
-# Remove old Docker image
-./removeOldDockerImage.sh $repoName $tagName $containerName
-
 # Pull new Docker image
-./pullNewImageFromDocker.sh $repoName $tagName $containerName
+./pullNewImageFromDocker.sh $repoName $tagName && \ 
 
-# Run Image as container
-./runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' ''
+# If pull new Docker image successfull: 
+# Stop existed pomodoro container
+./stopDockerContainer.sh $containerName && \
+
+# If Stopping existed pomodoro container successfull: 
+# Run new Image as container
+./runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && \
+
+# If Running new Image as container successfull: 
+# Remove all stopped Docker images with specific name
+{
+log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
+docker images | grep $repoName | grep -v $repoName:$tagName | awk '{print $3}' | xargs docker rmi
+} || \
+
+# Otherwise, if there's a failure in running the new image as a container: 
+{
+
+log "ERROR" "There's a failure in running the new image as a container."
+
+# Get a list of semantic version tags for the specified image name
+tags=$(docker images --format "{{.Tag}}" "$image_name" | grep -E "^\d+\.\d+\.\d+$")
+# Sort the tags in decreasing order
+sorted_tags=$(echo "$tags" | sort -rV)
+
+# Attempt to execute the image with the latest tag in semantic version format.
+
+# Flag to track if the first iteration is complete
+first_iteration=true
+
+# Iterate through the sorted tags
+successful=false
+for tag in $sorted_tags; do
+    if [ "$first_iteration" = true ]; then
+        first_iteration=false
+        continue  # Skip the first tag
+    fi
+
+    log "INFO" "Trying to start image $repoName:$tag"
+    if ./runImage.sh $repoName $tag $containerName '--rm -d -p 8123:80' '' ; then
+        log ""INFO "Successfully ran image with tag: $tag"
+        successful=true
+        break
+    else
+        log "ERROR" "Failed to run image with tag: $tag"
+    fi
+done
+
+# If unable to execute any image, raise an error.
+# Check if any successful run occurred
+if [ "$success" = false ]; then
+    log "ERROR" "Unable to run any image from the loop"
+    exit 1  # Exit with an error status
+fi
+}

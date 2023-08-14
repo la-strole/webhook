@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Necessary variables: 
+# 1. container name.
+# Example: ./stopDockerContainer.sh continerName
+
 log_file="webhook.log"
 
 module_name="stopDockerContainer.sh"
@@ -10,9 +15,7 @@ log() {
     echo "$timestamp - $module_name - $level - $message" >> "$log_file"
 }
 
-repoName="$1"
-tagName="$2"
-containerName="$3"
+containerName="$1"
 
 log "DEBUG" "Starting the $module_name script"
 

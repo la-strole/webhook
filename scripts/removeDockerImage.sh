@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Necessary variables: 
+# 1. Repository name (to be used as the image name).
+# 2. tagName
+# Example: ./removeDockerImage.sh johndou/superrepo 1.2.1
+
 log_file="webhook.log"
 
 module_name="removeOldDockerImage.sh"
@@ -13,12 +18,11 @@ log() {
 
 repoName="$1"
 tagName="$2"
-containerName="$3"
 
 log "DEBUG" "Starting the $module_name script"
 
 # Remove the old docker image
-command_output=$(sudo docker image rm $repoName 2>&1)
+command_output=$(sudo docker image rm $repoName:$tagName 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
     log "DEBUG" "Old image removed successfully: $command_output"

@@ -12,3 +12,6 @@ Steps:
     7. Initiate the Gunicorn service.
     8. To enable logging, generate a webhook.log file in the Flask app directory, ensuring it has write permissions for others (since the webhook user will be writing to it).
     9. Set permissions for the webhook user to run scripts in the scripts directory.
+
+
+https://docs.docker.com/docker-hub/webhooks/

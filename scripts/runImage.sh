@@ -1,4 +1,12 @@
 #!/bin/bash
+
+# Necessary variables: 
+# 1. repoName (to be used as the image name).
+# 2. tagName
+# 3. options  - Parameters for the docker run command.
+# 4. command - Commands for the docker run command.
+# Example: ./runimage.sh johndou/superrepo latest myfavoritecontainer '-p 8080:80 -d --rm' 'ls -a'
+
 log_file="webhook.log"
 
 module_name="runImage.sh"

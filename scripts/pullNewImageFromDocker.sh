@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Necessary variables: 
+# 1. repoName
+# 2. tagName
+# Example: ./pullNewImageFromDocker.sh johndou/superrepo latest
+
 log_file="webhook.log"
 
 module_name="pullNewImageFromDocker.sh"
@@ -13,7 +18,6 @@ log() {
 
 repoName="$1"
 tagName="$2"
-containerName="$3"
 
 # Pull the new image from docker
 command_output=$(sudo docker pull $repoName:$tagName 2>&1)
