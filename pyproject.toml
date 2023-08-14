@@ -9,6 +9,7 @@ license = "MIT"
 python = "^3.8.1"
 Flask = "^2.3.2"
 gunicorn = "^21.2.0"
+requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
 

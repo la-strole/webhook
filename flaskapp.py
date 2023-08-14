@@ -3,12 +3,13 @@ import logging_config
 import json
 import subprocess
 import threading  # or `import multiprocessing` for processes
+import requests
 
 # Segment of the URL used to validate the token from DockerHub webhook
 try:
     with open('application_conf.json', 'r') as file:
         configuration = json.load(file)
-        dockerhub_token = configuration.get('url_token')
+        dockerhub_url_token = configuration.get('url_token')
 except Exception as e:
     logging_config.logger_flask_app.error(f"Unable to load configuration from "
                                           f"./appplication_conf.json: {e}")
@@ -16,7 +17,7 @@ except Exception as e:
 app = Flask(__name__)
 
 
-def background_scripts_execution(pwd, repo_name, tag_name, container_name):
+def background_scripts_execution(pwd, repo_name, tag_name, container_name, callback_url):
 
     # Open the scripts binder
     with open('scripts_binder.json') as file:
@@ -34,17 +35,38 @@ def background_scripts_execution(pwd, repo_name, tag_name, container_name):
                                          repo_name,
                                          tag_name,
                                          container_name
-                                         ], check=False)
+                                         ], 
+                                         check=False,
+                                         capture_output=True,
+                                         text=True
+                                        )
                 logging_config.logger_flask_app.debug(
                     f'Script {script} completed '
                     f'with exit code {result.returncode}')
+                # Trigger a callback to DockerHub.
+                data = {
+                    'state' : 'success' if result.returncode == 0 else 'failure',
+                    'description' : '' if result.returncode == 0 else result.stderr,
+                    'context' : '',
+                    'target_url' : ''
+                }
+                response = requests.post(callback_url, json=data)
+                if response.status_code == 200:
+                    logging_config.logger_flask_app.info(
+                        'The webhook has been successfully validated.'
+                    )
+                else:
+                    logging_config.logger_flask_app.info(
+                        f'Webhook validation has failed. Status code: {response.status_code}'
+                    )
+
         else:
             logging_config.logger_flask_app.error(
                 f'No configured scripts found '
                 f'in /scripts for repository: {repo_name}')
 
 
-@app.route(f"/{dockerhub_token}", methods=["POST"])
+@app.route(f"/{dockerhub_url_token}", methods=["POST"])
 def webhook_handler():
 
     logging_config.logger_flask_app.info(
@@ -58,6 +80,7 @@ def webhook_handler():
         repo_name = json_data.get('repository').get('repo_name')
         container_name = repo_name.split('/')[1]
         tag_name = json_data.get('push_data').get('tag')
+        callback_url = json_data.get('callback_url')
     except Exception as e:
         logging_config.logger_flask_app.error(f'Invalid JSON data '
                                             f'in DockerHub POST payload: {e}')
@@ -78,7 +101,7 @@ def webhook_handler():
     # Start a new thread or process for the background task
     task_thread = threading.Thread(
         target=background_scripts_execution, 
-        args=(current_directory, repo_name, tag_name, container_name)
+        args=(current_directory, repo_name, tag_name, container_name, callback_url)
         )
     task_thread.start()
 
