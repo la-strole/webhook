@@ -30,7 +30,7 @@ containerName="$3"
 # Remove all stopped Docker images with specific name
 {
 log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
-docker images | grep $repoName | grep -v $repoName:$tagName | awk '{print $3}' | xargs docker rmi
+sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
 } || \
 
 # Otherwise, if there's a failure in running the new image as a container: 
@@ -39,7 +39,7 @@ docker images | grep $repoName | grep -v $repoName:$tagName | awk '{print $3}' |
 log "ERROR" "There's a failure in running the new image as a container."
 
 # Get a list of semantic version tags for the specified image name
-tags=$(docker images --format "{{.Tag}}" "$image_name" | grep -E "^\d+\.\d+\.\d+$")
+tags=$(sudo docker images --format "{{.Tag}}" "$repoName" | grep -E "^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$")
 # Sort the tags in decreasing order
 sorted_tags=$(echo "$tags" | sort -rV)
 
