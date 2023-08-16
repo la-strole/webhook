@@ -16,23 +16,23 @@ tagName="$2"
 containerName="$3"
 
 # Pull new Docker image
-./scripts/pullNewImageFromDocker.sh $repoName $tagName && \ 
+./scripts/pullNewImageFromDocker.sh $repoName $tagName && 
 
 # If pull new Docker image successfull: 
 # Stop existed pomodoro container
-./scripts/stopDockerContainer.sh $containerName && \
+./scripts/stopDockerContainer.sh $containerName && 
 
 # If Stopping existed pomodoro container successfull: 
 # Run new Image as container
 {
-    ./scripts/runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && \
+    ./scripts/runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && 
 
     # If Running new Image as container successfull: 
     # Remove all stopped Docker images with specific name
     {
         log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
         sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
-    } || \
+    } || 
 
     # Otherwise, if there's a failure in running the new image as a container: 
     {
