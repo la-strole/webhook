@@ -16,60 +16,62 @@ tagName="$2"
 containerName="$3"
 
 # Pull new Docker image
-./pullNewImageFromDocker.sh $repoName $tagName && \ 
+./scripts/pullNewImageFromDocker.sh $repoName $tagName && \ 
 
 # If pull new Docker image successfull: 
 # Stop existed pomodoro container
-./stopDockerContainer.sh $containerName && \
+./scripts/stopDockerContainer.sh $containerName && \
 
 # If Stopping existed pomodoro container successfull: 
 # Run new Image as container
-./runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && \
-
-# If Running new Image as container successfull: 
-# Remove all stopped Docker images with specific name
 {
-log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
-sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
-} || \
+    ./scripts/runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && \
 
-# Otherwise, if there's a failure in running the new image as a container: 
-{
+    # If Running new Image as container successfull: 
+    # Remove all stopped Docker images with specific name
+    {
+        log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
+        sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
+    } || \
 
-log "ERROR" "There's a failure in running the new image as a container."
+    # Otherwise, if there's a failure in running the new image as a container: 
+    {
 
-# Get a list of semantic version tags for the specified image name
-tags=$(sudo docker images --format "{{.Tag}}" "$repoName" | grep -E "^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$")
-# Sort the tags in decreasing order
-sorted_tags=$(echo "$tags" | sort -rV)
+        log "ERROR" "There's a failure in running the new image as a container."
 
-# Attempt to execute the image with the latest tag in semantic version format.
+        # Get a list of semantic version tags for the specified image name
+        tags=$(sudo docker images --format "{{.Tag}}" "$repoName" | grep -E "^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$")
+        # Sort the tags in decreasing order
+        sorted_tags=$(echo "$tags" | sort -rV)
 
-# Flag to track if the first iteration is complete
-first_iteration=true
+        # Attempt to execute the image with the latest tag in semantic version format.
 
-# Iterate through the sorted tags
-successful=false
-for tag in $sorted_tags; do
-    if [ "$first_iteration" = true ]; then
-        first_iteration=false
-        continue  # Skip the first tag
-    fi
+        # Flag to track if the first iteration is complete
+        first_iteration=true
 
-    log "INFO" "Trying to start image $repoName:$tag"
-    if ./runImage.sh $repoName $tag $containerName '--rm -d -p 8123:80' '' ; then
-        log ""INFO "Successfully ran image with tag: $tag"
-        successful=true
-        break
-    else
-        log "ERROR" "Failed to run image with tag: $tag"
-    fi
-done
+        # Iterate through the sorted tags
+        successful=false
+        for tag in $sorted_tags; do
+            if [ "$first_iteration" = true ]; then
+                first_iteration=false
+                continue  # Skip the first tag
+            fi
 
-# If unable to execute any image, raise an error.
-# Check if any successful run occurred
-if [ "$success" = false ]; then
-    log "ERROR" "Unable to run any image from the loop of existed images"
-    exit 1  # Exit with an error status
-fi
+            log "INFO" "Trying to start image $repoName:$tag"
+            if ./scripts/runImage.sh $repoName $tag $containerName '--rm -d -p 8123:80' '' ; then
+                log ""INFO "Successfully ran image with tag: $tag"
+                successful=true
+                break
+            else
+                log "ERROR" "Failed to run image with tag: $tag"
+            fi
+        done
+
+        # If unable to execute any image, raise an error.
+        # Check if any successful run occurred
+        if [ "$success" = false ]; then
+            log "ERROR" "Unable to run any image from the loop of existed images"
+            exit 1  # Exit with an error status
+        fi
+    }
 }
