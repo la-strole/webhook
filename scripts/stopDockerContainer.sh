@@ -23,7 +23,7 @@ log "DEBUG" "Starting the $module_name script"
 command_output=$(sudo docker stop $containerName 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Container stopped successfully: $command_output"
+    log "INFO" "Container stopped successfully: $command_output"
 else
     log "ERROR" "Failed to stop container: $command_output"
 fi

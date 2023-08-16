@@ -23,7 +23,7 @@ tagName="$2"
 command_output=$(sudo docker pull $repoName:$tagName 2>&1)
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
-    log "DEBUG" "Image pulled from Docker successfully: $command_output"
+    log "INFO" "Image pulled from Docker successfully: $command_output"
 else
     log "ERROR" "Failed to pull image from Docker: $command_output"
 fi

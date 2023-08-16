@@ -69,7 +69,7 @@ done
 # If unable to execute any image, raise an error.
 # Check if any successful run occurred
 if [ "$success" = false ]; then
-    log "ERROR" "Unable to run any image from the loop"
+    log "ERROR" "Unable to run any image from the loop of existed images"
     exit 1  # Exit with an error status
 fi
 }
