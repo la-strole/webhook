@@ -17,7 +17,7 @@ containerName="$3"
 log "INFO" "Initiating the $module_name script"
 
 # Cease the operation of the active Docker container
-command_output=$(echo "Test successful. repoName=$repoName, tagName=$tagName, containerName=$containerName" 2>&1)
+command_output=$(echo "Test successful. repoName=$repoName, tagName=$tagName, containerName=$containerName" 2> >(tee /dev/stderr))
 # Determine if the command executed successfully or resulted in an error
 if [ $? -eq 0 ]; then
     log "INFO" "Test script executed: $command_output"

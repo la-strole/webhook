@@ -22,7 +22,7 @@ tagName="$2"
 log "DEBUG" "Starting the $module_name script"
 
 # Remove the old docker image
-command_output=$(sudo docker image rm $repoName:$tagName 2>&1)
+command_output=$(sudo docker image rm $repoName:$tagName 2> >(tee /dev/stderr))
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
     log "DEBUG" "Old image removed successfully: $command_output"

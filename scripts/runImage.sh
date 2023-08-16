@@ -27,7 +27,7 @@ command="$5"
 log "DEBUG" "Starting the $module_name script"
 
 # Run the new image
-command_output=$(sudo docker run $opttions --name $containerName $repoName:$tagName $command 2>&1)
+command_output=$(sudo docker run $opttions --name $containerName $repoName:$tagName $command 2> >(tee /dev/stderr))
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
     log "DEBUG" "Image run in Docker successfully: $command_output"

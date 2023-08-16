@@ -20,7 +20,7 @@ repoName="$1"
 tagName="$2"
 
 # Pull the new image from docker
-command_output=$(sudo docker pull $repoName:$tagName 2>&1)
+command_output=$(sudo docker pull $repoName:$tagName 2> >(tee /dev/stderr))
 # Check if the command was successful or resulted in an error
 if [ $? -eq 0 ]; then
     log "INFO" "Image pulled from Docker successfully: $command_output"

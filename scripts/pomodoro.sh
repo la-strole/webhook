@@ -25,7 +25,7 @@ containerName="$3"
 # If Stopping existed pomodoro container successfull: 
 # Run new Image as container
 {
-    ./scripts/runImage.sh $repoName $tagName $containerName '--rm -d -p 8123:80' '' && 
+    ./scripts/runImage.sh $repoName $tagName $containerName '-d -p 8123:80' '' && 
 
     # If Running new Image as container successfull: 
     # Remove all stopped Docker images with specific name
