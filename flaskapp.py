@@ -10,6 +10,7 @@ try:
     with open('application_conf.json', 'r') as file:
         configuration = json.load(file)
         dockerhub_url_token = configuration.get('url_token')
+        target_url = configuration.get('target_url')
 except Exception as e:
     logging_config.logger_flask_app.error(f"Unable to load configuration from "
                                           f"./appplication_conf.json: {e}")
@@ -48,7 +49,7 @@ def background_scripts_execution(pwd, repo_name, tag_name, container_name, callb
                     'state' : 'success' if result.returncode == 0 else 'failure',
                     'description' : '' if result.returncode == 0 else result.stderr,
                     'context' : '',
-                    'target_url' : ''
+                    'target_url' : target_url if target_url else ''
                 }
                 response = requests.post(callback_url, json=data)
                 if response.status_code == 200:
@@ -73,6 +74,7 @@ def webhook_handler():
         'Received a webhook request from Docker')
 
     # Extract JSON payload from the request
+    # Refer to: https://docs.docker.com/docker-hub/webhooks/
     json_data = request.json
 
     try:
@@ -86,7 +88,6 @@ def webhook_handler():
                                             f'in DockerHub POST payload: {e}')
         return jsonify({'error': 'Invalid JSON data'}), 400
 
-    # Refer to: https://docs.docker.com/docker-hub/webhooks/
     logging_config.logger_flask_app.debug(f"Repository name: {repo_name}")
 
     # Run the 'pwd' command to get the current working directory

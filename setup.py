@@ -24,10 +24,10 @@ with open('application_conf.json', 'r') as file:
     try:
         configuration = json.load(file)
         old_url_token = configuration.get('url_token')
-        old_callback_url = configuration.get('callback_url')
+        old_target_url = configuration.get('target_url')
         print(f'Your current configuration:\n'
               f'url_token: {old_url_token}\n'
-              f'callback_url: {old_callback_url}\n')
+              f'target_url: {old_target_url}\n')
         if old_url_token:
             solution = input('Do you want to change url_token? y/n: ')
             if solution in ['y', 'Y']:
@@ -39,24 +39,24 @@ with open('application_conf.json', 'r') as file:
             configuration['url_token'] = str(token)
             print(f"Because your URL token didn't exist, "
                   f"a new token was created with the value:\n{token}")
-        if old_callback_url:
-            solution = input('Do you want to change callback_url? y/n: ')
+        if old_target_url:
+            solution = input('Do you want to change target_url? y/n: ')
             if solution in ['y', 'Y']:
-                configuration['callback_url'] = input(
-                    'Specify a new value for the callback_url: ')
-                print("The callback_url was successfully updated.")
+                configuration['target_url'] = input(
+                    'Specify a new value for the target_url: ')
+                print("The target_url was successfully updated.")
             else:
-                print("Alright, callback_url remains unchanged")
+                print("Alright, target_url remains unchanged")
         else:
-            solution = input('Do you want to set callback_url? y/n: ')
+            solution = input('Do you want to set target_url? y/n: ')
             if solution in ['y', 'Y']:
-                configuration['callback_url'] = input(
-                    'Specify a new value for the callback_url: ')
-                print("The callback_url was successfully updated.")
+                configuration['target_url'] = input(
+                    'Specify a new value for the target_url: ')
+                print("The target_url was successfully updated.")
             else:
-                print("Alright, callback_url remains unchanged")
+                print("Alright, target_url remains unchanged")
         if (old_url_token != configuration.get('url_token') or 
-            old_callback_url != configuration.get('callback_url')):
+            old_target_url != configuration.get('target_url')):
             rewrite_configuration(configuration)
 
 
