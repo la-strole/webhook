@@ -19,10 +19,10 @@ containerName="$3"
 ./scripts/pullNewImageFromDocker.sh $repoName $tagName && 
 
 # If pull new Docker image successfull: 
-# Stop existed pomodoro container
+# Stop and remove existed pomodoro container
 ./scripts/stopDockerContainer.sh $containerName && 
-
-# If Stopping existed pomodoro container successfull: 
+./scripts/removeDockerContainer.sh $containerName &&
+# If Stopping and removing existed pomodoro container successfull: 
 # Run new Image as container
 {
     ./scripts/runImage.sh $repoName $tagName $containerName '-d -p 8123:80' '' && 
