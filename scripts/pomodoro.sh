@@ -2,7 +2,7 @@
 
 log_file="webhook.log"
 
-module_name="pomodoroWorkflow.sh"
+module_name="pomodoro.sh"
 
 log() {
     local timestamp=$(date "+%Y-%m-%d %H:%M:%S,%3N")
@@ -25,14 +25,13 @@ containerName="$3"
 # If Stopping and removing existed pomodoro container successfull: 
 # Run new Image as container
 {
-    ./scripts/runImage.sh $repoName $tagName $containerName '-d -p 8123:80' '' && 
-
-    # If Running new Image as container successfull: 
+    ./scripts/runImage.sh $repoName $tagName $containerName '-d -p 8123:80' '' &&
+        # If Running new Image as container successfull: 
     # Remove all stopped Docker images with specific name
     {
         log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
         sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
-    } || 
+    }  || 
 
     # Otherwise, if there's a failure in running the new image as a container: 
     {
@@ -69,7 +68,7 @@ containerName="$3"
 
         # If unable to execute any image, raise an error.
         # Check if any successful run occurred
-        if [ "$success" = false ]; then
+        if [ "$successful" = false ]; then
             log "ERROR" "Unable to run any image from the loop of existed images"
             exit 1  # Exit with an error status
         fi
