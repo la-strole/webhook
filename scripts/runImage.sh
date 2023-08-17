@@ -31,7 +31,7 @@ sudo docker run $options --name $containerName $repoName:$tagName
 command_output=$?
 # Check if the command was successful or resulted in an error
 if [ $command_output -eq 0 ]; then
-    log "DEBUG" "Image run in Docker successfully: $command_output"
+    log "DEBUG" "Image $repoName:$tagName run in Docker successfully."
 else
-    log "ERROR" "Failed to run image in Docker: $command_output"
+    log "ERROR" "Failed to run image $repoName:$tagName in Docker."
 fi
