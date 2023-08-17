@@ -25,7 +25,7 @@ sudo docker stop $containerName
 command_output=$?
 # Check if the command was successful or resulted in an error
 if [ $command_output -eq 0 ]; then
-    log "INFO" "Container $containerName successfully."
+    log "INFO" "Container $containerName stopped successfully."
 else
-    log "ERROR" "Failed to stop container containerName."
+    log "ERROR" "Failed to stop container $containerName."
 fi

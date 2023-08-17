@@ -26,7 +26,7 @@ sudo docker image rm $repoName:$tagName
 command_output=$?
 # Check if the command was successful or resulted in an error
 if [ $command_output -eq 0 ]; then
-    log "DEBUG" "Old image $repoName:$tagName removed successfully."
+    log "INFO" "Old image $repoName:$tagName removed successfully."
 else
     log "ERROR" "Failed to remove old image $repoName:$tagName."
 fi

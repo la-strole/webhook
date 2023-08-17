@@ -30,7 +30,7 @@ containerName="$3"
     # Remove all stopped Docker images with specific name
     {
         log "INFO" "Attempt to remove all Docker images with name $repoName that are currently in a stopped state."
-        sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi
+        sudo docker images | grep $repoName | grep -vw $tagName | awk '{print $3}' | xargs sudo docker rmi 
     }  || 
 
     # Otherwise, if there's a failure in running the new image as a container: 

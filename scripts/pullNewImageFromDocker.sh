@@ -19,6 +19,8 @@ log() {
 repoName="$1"
 tagName="$2"
 
+log "DEBUG" "Starting the $module_name script"
+
 # Pull the new image from docker
 
 sudo docker pull $repoName:$tagName 
