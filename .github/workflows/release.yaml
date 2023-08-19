@@ -22,3 +22,34 @@ jobs:
           FOLDER: dist # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
+          name: Deploy pipeline
+
+  Deployment:
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+     
+      - 
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and export to Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          load: true
+          tags: webhook_test
+
+      -
+        name: Push Docker image
+        run: |
+          docker tag webhook_test eugeneparkhom/webhook:latest
+          docker push eugeneparkhom/webhook:latest
