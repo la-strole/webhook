@@ -1,0 +1,31 @@
+name: Test suite
+on:
+    pull_request:
+      types: ["opened"]
+      branches: [ "main" ]
+jobs:
+  TestSuite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install environment dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -sSL https://install.python-poetry.org | python3 -
+          ~/.local/share/pypoetry/venv/bin/poetry install 
+      
+      - name: Run pytest
+        run: make test
+
+      - name: TruffleHog Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          # Repository path
+          path: ./
+          # Start scanning from here (usually main branch).
+          base: ${{ github.event.repository.default_branch }}
+          extra_args: --debug --only-verified
