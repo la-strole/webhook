@@ -3,6 +3,11 @@ name: Generate a build and push to another branch
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'docker_webhook/**'
+      - 'Makefile'
+      - 'flaskapp.py'
+      - 'Dockerfile'
 jobs:
   build:
     runs-on: ubuntu-latest
