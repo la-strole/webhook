@@ -28,7 +28,7 @@ def test_make_fake_request(client):
                 "status": "Active"
             }
             }
-    # get url_token
+    # get the url_token
     with open('./docker_webhook/application_conf.json', 'r') as file:
         configuration = json.load(file)
         token = configuration.get('url_token')
