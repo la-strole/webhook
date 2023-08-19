@@ -1,33 +1,27 @@
-name: Cleanup and Deploy
+name: Generate a build and push to another branch
 
 on:
-  push:
-    branches:
-      - main
-
+  pull_request:
+    types: ["opened"]
+    branches: [ "dev" ]
 jobs:
-  cleanup-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
+    name: Build and Push
     steps:
-      - name: Checkout code
+      - name: git-checkout
         uses: actions/checkout@v2
 
-      - name: Run cleanup script
-        run: |
-          # Run your cleanup script here
-          make build
-      
-      - name: Commit changes
-        run: |
-            git config --local user.email "action@github.com"
-            git config --local user.name "GitHub Action"
-            git commit -am "Cleanup dependencies for release" || echo "No changes to commit"
-
-      - name: Push changes to main branch
-        run: |
-            git push origin HEAD:main            
+      - name: Build
+        run: make build # The build command of your project
+    
+      - name: Push
+        uses: s0/git-publish-subdir-action@develop
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          REPO: self
+          BRANCH: main # The branch name where you want to push the assets
+          FOLDER: dist # The directory where your assets are generated
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+          MESSAGE: "Build: ({sha}) {msg}" # The commit message
 
           
