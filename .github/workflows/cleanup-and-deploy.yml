@@ -1,0 +1,29 @@
+name: Cleanup and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run cleanup script
+        run: |
+          # Run your cleanup script here
+          make build
+      
+      - name: Commit changes
+        run: |
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git commit -am "Cleanup dependencies for release" || echo "No changes to commit"
+
+      - name: Push changes to main branch
+        run: |
+            git push origin HEAD:main
