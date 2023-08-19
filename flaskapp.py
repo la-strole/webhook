@@ -18,8 +18,10 @@ except Exception as e:
 app = Flask(__name__)
 
 
-def background_scripts_execution(pwd, repo_name, tag_name, callback_url):
-
+def background_scripts_execution(pwd: str, repo_name: str, tag_name: str, callback_url: str):
+    """
+    Execute a background script from the script directory
+    """
     # Open the scripts binder
     with open('./docker_webhook/scripts_binder.json') as file:
         # Parse the JSON content into a dictionary
