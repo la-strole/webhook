@@ -1,0 +1,8 @@
+docker_webhook/
+.venv/
+**/__pycache__/
+*.lock
+*.vscode/
+.pytest_cache/
+.git/
+Makefile
