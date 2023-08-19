@@ -1,7 +1,7 @@
 FROM python:slim-bullseye
 
 
-# Install docker, curl gnupg
+# Install docker,  curl gnupg
 # https://docs.docker.com/engine/install/debian/
 RUN apt-get update
 RUN apt-get install -y ca-certificates curl gnupg
