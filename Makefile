@@ -12,4 +12,6 @@ build:
 	mkdir dist
 	cp Makefile ./dist/
 	cp -r ./docker_webhook ./dist/
-	
+
+test:
+	~/.local/share/pypoetry/venv/bin/poetry run pytest
