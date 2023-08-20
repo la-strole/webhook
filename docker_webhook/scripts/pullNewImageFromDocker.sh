@@ -3,7 +3,7 @@
 # Necessary variables: 
 # 1. repoName
 # 2. tagName
-# Example: ./pullNewImageFromDocker.sh johndou/superrepo latest
+# Example: ./pullNewImageFromDocker.sh johndoe/superrepo latest
 
 log_file="./docker_webhook/webhook.log"
 
