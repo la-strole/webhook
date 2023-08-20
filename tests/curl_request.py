@@ -20,7 +20,7 @@ body = {"callback_url": "https://registry.hub.docker.com/u/svendowideit/testhook
             "name": "testhook",
             "namespace": "svendowideit",
             "owner": "svendowideit",
-            "repo_name": "johndou/testRepo",
+            "repo_name": "johndoe/testRepo",
             "repo_url": "https://registry.hub.docker.com/u/svendowideit/testhook/",
             "star_count": 0,
             "status": "Active"

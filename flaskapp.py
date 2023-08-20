@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-import docker_webhook.logging_config as logging_config
+import logging_config
 import json
 import subprocess
 import threading  # or `import multiprocessing` for processes
