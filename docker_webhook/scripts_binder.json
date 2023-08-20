@@ -1,5 +1,3 @@
 {
-  "eugeneparkhom/pomodoro": ["pomodoro.sh"],
-  "eugeneparkhomweatherbot": ["weatherbot.sh"],
   "johndou/testRepo": ["testScript.sh"]
 }

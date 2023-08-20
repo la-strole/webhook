@@ -3,7 +3,7 @@
 # Necessary variables: 
 # 1. Repository name (to be used as the image name).
 # 2. tagName
-# Example: ./removeDockerImage.sh johndou/superrepo 1.2.1
+# Example: ./removeDockerImage.sh johndoe/superrepo 1.2.1
 
 log_file="./docker_webhook/webhook.log"
 

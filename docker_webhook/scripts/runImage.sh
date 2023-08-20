@@ -5,7 +5,7 @@
 # 2. tagName
 # 3. options  - Parameters for the docker run command.
 # 4. command - Commands for the docker run command.
-# Example: ./runimage.sh johndou/superrepo latest myfavoritecontainer '-p 8080:80 -d --rm' 'ls -a'
+# Example: ./runimage.sh johndoe/superrepo latest myfavoritecontainer '-p 8080:80 -d --rm' 'ls -a'
 
 log_file="./docker_webhook/webhook.log"
 
