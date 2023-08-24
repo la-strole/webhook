@@ -42,7 +42,7 @@ As you integrate DockerHub into your CI/CD pipeline, you may realize that the bu
 
 In the context of the continuous deployment (CD) pipeline, the operational flow assumes that when a new image is uploaded to DockerHub and a corresponding webhook signal is transmitted to the server, the ensuing procedure entails fetching a fresh image from DockerHub, discontinuing the existing container, and subsequently launching the new image on the server.
 
-![CI/CD pipeline](https://github.com/la-strole/webhook/main/readme_src/images/image1.png)
+![CI/CD pipeline](https://github.com/la-strole/webhook/blob/main/readme_src/images/image1.png?raw=true)
 
 ## 🖖 Features <a name = "features"></a>
 - Authenticate DockerHub's POST request by employing a distinctive URL sequence;
@@ -81,7 +81,7 @@ git clone -b release https://github.com/la-strole/webhook.git
 Alternatively, you can directly copy the files from https://github.com/la-strole/webhook/tree/release.<br>
 
 2. Presently, the folder structure resembles the following: <br>
-![folder structure](https://github.com/la-strole/webhook/main/readme_src/images/image2.png)
+![folder structure](https://github.com/la-strole/webhook/blob/main/readme_src/images/image2.png?raw=true)
 - `scrips/` -  folder containing your bash scripts (here `pomodoro.sh` is user's script) along with commonly pre-installed templates. In this section, you have the option to introduce your custom scripts, employing your unique Docker commands, or blend them with the templates that are already pre-installed (additional information about templates will be covered later on).
 - `scripts_binder.json` - a JSON file used to associate your scripts with DockerHub repositories from which you anticipate receiving webhooks. 
 - `application_conf.json` is a JSON file designed to hold the configuration settings for your application. You have the option to directly modify this file, or alternatively, you can utilize the dedicated script `setup.py` which is intended to make modifications to this configuration file.
@@ -240,7 +240,7 @@ containerName="pomodoro"
 Store your script in the `/scripts` folder.
 #### 3. Associate your script with a DockerHub repository name.
 Modify the file `scripts_binder.json` to align with your specific needs. For instance: <br>
-![file structure](https://github.com/la-strole/webhook/main/readme_src/images/image3.png) <br>
+![file structure](https://github.com/la-strole/webhook/blob/main/readme_src/images/image3.png?raw=true) <br>
 here: <br> `"JohnDOE/superrepo"` - represents your DockerHub repository name. <br>
 `["first_script.sh", "another_script.sh"]` - signifies a list of scripts from the `scripts/` folder that will be executed upon receiving a webhook from the DockerHub repository `"JohnDOE/superrepo"`.
 #### 4. Launch the webhook image.
@@ -248,7 +248,7 @@ Using your command-line interface (CLI):<br>`make run`
 
 ## 🏁 Developers Guide <a name = "developers_guide"></a>
 ### Workflow architecture
-![Workflow architecture](https://github.com/la-strole/webhook/main/readme_src/images/image4.png)
+![Workflow architecture](https://github.com/la-strole/webhook/blob/main/readme_src/images/image4.png?raw=true)
 ### Installation
 1. `git clone https://github.com/la-strole/webhook.git`
 2. Build a docker image: `docker build -t webhook .`
